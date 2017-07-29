@@ -91,31 +91,55 @@ class BluetoothLEAdvertisementTest():
             if ord(data[1]) == EVT_CMD_COMPLETE:
                 print("EVT_CMD_COMPLETE")
 
-                if (ord(data[5])<<8) + ord(data[4]) == LE_SET_SCAN_PARAMETERS_CMD:
+                if (ord(data[5])<<8) + ord(data[4]) == LE_SET_ADVERTISING_PARAMETERS_CMD:
                     if ord(data[6]) == HCI_SUCCESS:
-                        print('LE Scan Parameters Set');
+                        print('LE Advertising Parameters Set');
 
-                elif (ord(data[5])<<8 + ord(data[4])) ==  LE_SET_SCAN_ENABLE_CMD:
+                elif (ord(data[5])<<8 + ord(data[4])) ==  LE_SET_ADVERTISING_DATA_CMD:
                     if ord(data[6]) == HCI_SUCCESS:
-                        print('LE Scan Enable Set')
-
+                        print('LE Advertising Data Set')
+                elif (ord(data[5])<<8 + ord(data[4])) ==  LE_SET_SCAN_RESPONSE_DATA_CMD:
+                    if ord(data[6]) == HCI_SUCCESS:
+                        print('LE Scan Response Data Set')
+                elif (ord(data[5])<<8 + ord(data[4])) ==  LE_SET_ADVERTISE_ENABLE_CMD:
+                    if ord(data[6]) == HCI_SUCCESS:
+                        print('LE Advertise Enable Set')
+            elif ord(data[1]) == EVT_DISCONN_COMPLETE:
+                print("EVT_DISCONN_COMPLETE")
+                disconn_info = dict(
+                    status = ord(data[3]),
+                    handle = ord(data[5])<<8 + ord(data[4]),
+                    reason = ord(data[6])
+                )
+                print(disconn_info)
+                exit(0)
             elif ord(data[1]) == EVT_LE_META_EVENT:
                 print("EVT_LE_META_EVENT")
-                if ord(data[3]) == EVT_LE_ADVERTISING_REPORT:
-                    # TODO: check offsets for all of these:
+                if ord(data[3]) == EVT_LE_CONN_COMPLETE:
 
-                    gap_adv_type =['ADV_IND', 'ADV_DIRECT_IND', 'ADV_SCAN_IND', 'ADV_NONCONN_IND', 'SCAN_RSP'][ord(data[5])]
-                    gap_addr_type = ['PUBLIC', 'RANDOM'][ord(data[6])]
-                    gap_addr =  [hex(ord(c)) for c in data[12:6:-1]]
-                    eir = [chr(ord(c)) for c in data[14:-2]]
-                    rssi = ord(data[-1])
+                    conn_info = dict(
+                        status= ord(data[4]),
+                        handle= ord(data[6])<<8 + ord(data[5]),
+                        role=   ord(data[7]),
+                        peerBdAddrType= ord(data[8]),
+                        peerBdAddr= 0, #data.slice(9, 15)
+                        interval=  ord(data[16])<<8 + ord(data[15]),
+                        latency= ord(data[18])<<8 + ord(data[17]),
+                        supervisionTimeout= ord(data[20])<<8 + ord(data[19]),
+                        masterClockAccuracy = ord(data[21]) )
+                    print(conn_info)
+                    self.set_advertise_enable(True);
+                elif ord(data[3]) == EVT_LE_CONN_UPDATE_COMPLETE:
 
-                    print('LE Advertising Report')
-                    print('\tAdv Type  = {}'.format(gap_adv_type))
-                    print('\tAddr Type = {}'.format(gap_addr_type))
-                    print('\tAddr      = {}'.format(gap_addr))
-                    print('\tEIR       = {}'.format(eir))
-                    print('\tRSSI      = {}'.format(rssi))
+                    conn_info = dict(
+                        status = ord(data[4]),
+                        handle = ord(data[6])<<8 + ord(data[5]),
+                        interval = ord(data[8])<<8 + ord(data[7]),
+                        latency = ord(data[10])<<8 + ord(data[9]),
+                        supervisionTimeout = ord(data[12])<<8 + ord(data[11]),
+                    )
+                    print(conn_info)
+
 
 if __name__ == "__main__":
 
@@ -133,7 +157,7 @@ if __name__ == "__main__":
     ble_advertise_test.set_advertising_parameter()
     ble_advertise_test.set_scan_response_data(scan_rsp_data.decode('hex'))
     ble_advertise_test.set_advertising_data(adv_data.decode('hex'))
-    
+
     ble_advertise_test.set_advertise_enable(True)
 
     pause()
