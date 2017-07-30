@@ -1,13 +1,24 @@
 
 # Bluetooth HCI Python library
 
-A pure Python module written using only the Python standard library for interacting with the Bluetooth HCI.
+A pure Python module written using only the Python standard library for interacting with the Bluetooth Host Controller Interface (HCI), e.g. Bluetooth LE hardware.
 
-The primary benefit is the lack of dependency on the PyBluez Python/Native libraries, bluetoothd service and D-Bus.
-
-`hcipy` could be considered to be a Pythonisation of the NodeJS [noble](https://github.com/sandeepmistry/noble) and [bleno](https://github.com/sandeepmistry/bleno) libraries by [Sandeep Mistry](https://github.com/sandeepmistry)
+The primary benefit of using this module is the lack of having any dependency on: PyBluez Python & C based module, the `bluetoothd` service or D-Bus; this module just uses the standard Python socket API.
 
 This is being developed as an experiment for the [bluezero](https://github.com/ukBaz/python-bluezero) library in the open with the hope that developers may find it useful and might also contribute to the development.
+
+The goal it to provide enough of the HCI API to support (at least) everything that `bluezero` aims to support, which includes:
+
+- BLE Adapter controler and querying
+- Advertisement (GATT, Eddystone Beacons, custom)
+- GATT Client (Central role)
+- GATT Server (Peripheral role)
+- Scanning
+
+
+`hcipy` could be considered to be, initially, a Python port of the [HCI support binary](https://github.com/sandeepmistry/node-bluetooth-hci-socket/blob/master/examples/le-connection-test.js) used by  NodeJS [noble](https://github.com/sandeepmistry/noble) and [bleno](https://github.com/sandeepmistry/bleno) libraries by [Sandeep Mistry](https://github.com/sandeepmistry)
+
+The current development platform is Linux (Raspbian), although other Unix based platforms may work. Mac and Windows should be possible, as they do for Noble and Bleno, in some way.
 
 
 Status:  Experimental

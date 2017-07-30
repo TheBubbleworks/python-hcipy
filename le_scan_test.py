@@ -47,31 +47,31 @@ class BluetoothLEScanTest:
         self.hci.write(cmd)
 
 
-    # receives a bytearray
     def on_data(self, data):
-        if ord(data[0]) == HCI_EVENT_PKT:
+        data = bytearray(data)
+        if data[0] == HCI_EVENT_PKT:
             print("HCI_EVENT_PKT")
-            if ord(data[1]) == EVT_CMD_COMPLETE:
+            if data[1] == EVT_CMD_COMPLETE:
                 print("EVT_CMD_COMPLETE")
 
-                if (ord(data[5])<<8) + ord(data[4]) == LE_SET_SCAN_PARAMETERS_CMD:
-                    if ord(data[6]) == HCI_SUCCESS:
+                if (data[5]<<8) + data[4] == LE_SET_SCAN_PARAMETERS_CMD:
+                    if data[6] == HCI_SUCCESS:
                         print('LE Scan Parameters Set');
 
-                elif (ord(data[5])<<8 + ord(data[4])) ==  LE_SET_SCAN_ENABLE_CMD:
-                    if ord(data[6]) == HCI_SUCCESS:
+                elif data[5]<<8 + data[4] ==  LE_SET_SCAN_ENABLE_CMD:
+                    if data[6] == HCI_SUCCESS:
                         print('LE Scan Enable Set')
 
-            elif ord(data[1]) == EVT_LE_META_EVENT:
+            elif data[1] == EVT_LE_META_EVENT:
                 print("EVT_LE_META_EVENT")
-                if ord(data[3]) == EVT_LE_ADVERTISING_REPORT:
+                if data[3] == EVT_LE_ADVERTISING_REPORT:
                     # TODO: check offsets for all of these:
 
-                    gap_adv_type =['ADV_IND', 'ADV_DIRECT_IND', 'ADV_SCAN_IND', 'ADV_NONCONN_IND', 'SCAN_RSP'][ord(data[5])]
-                    gap_addr_type = ['PUBLIC', 'RANDOM'][ord(data[6])]
-                    gap_addr =  [hex(ord(c)) for c in data[12:6:-1]]
-                    eir = [chr(ord(c)) for c in data[14:-2]]
-                    rssi = ord(data[-1])
+                    gap_adv_type =['ADV_IND', 'ADV_DIRECT_IND', 'ADV_SCAN_IND', 'ADV_NONCONN_IND', 'SCAN_RSP'][data[5]]
+                    gap_addr_type = ['PUBLIC', 'RANDOM'][data[6]]
+                    gap_addr =  [hex(c) for c in data[12:6:-1]]
+                    eir = [chr(c) for c in data[14:-2]]
+                    rssi = data[-1]
 
                     print('LE Advertising Report')
                     print('\tAdv Type  = {}'.format(gap_adv_type))

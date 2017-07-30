@@ -26,12 +26,15 @@ import threading
 from .constants import *
 
 
+
+
+
 # -------------------------------------------------
 # Socket HCI transport API
 
 # This socket based to the Bluetooth HCI.
 
-# Strong candidate for refactoring into a 'provider interface' pattern to support
+# Strong candidate for refactoring into factory pattern to support
 # alternate transports (e.g. serial) and easier mocking for automated testing.
 
 class BluetoothHCISocketProvider:
@@ -124,12 +127,12 @@ class BluetoothHCI:
 
     def get_device_info(self):
 
-        # `struct hci_dev_info` defined at https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/lib/hci.h#n2382
-        s = struct.Struct('=H 8s 6B L B 8B 3L 4I 10L')
+        # C hci_dev_info struct defined at https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/lib/hci.h#n2382
+        hci_dev_info_struct = struct.Struct('=H 8s 6B L B 8B 3L 4I 10L')
 
-        request_dta = s.pack(
+        request_dta = hci_dev_info_struct.pack(
             self.hci.device_id,
-            '',
+            b'',
             0, 0, 0, 0, 0, 0,
             0,
             0,
@@ -140,7 +143,7 @@ class BluetoothHCI:
 
         response_data = self.send_cmd(HCIGETDEVINFO, request_dta)
 
-        hci_dev_info = s.unpack(response_data)
+        hci_dev_info = hci_dev_info_struct.unpack(response_data)
 
         # Just extract a few parts for now
         device_id = hci_dev_info[0]

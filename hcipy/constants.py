@@ -8,7 +8,7 @@
 # HCI ioctl Commands:
 HCIDEVUP = 0x400448c9  # 201
 HCIDEVDOWN = 0x400448ca  # 202
-HCIGETDEVINFO = 0x800448d3L  # _IOR(ord('H'), 211, 4)
+HCIGETDEVINFO = -2147202861 #0x800448d3L  # _IOR(ord('H'), 211, 4)
 
 # HCI Parameters
 
