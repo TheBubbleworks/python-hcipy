@@ -26,9 +26,6 @@ import threading
 from .constants import *
 
 
-
-
-
 # -------------------------------------------------
 # Socket HCI transport API
 
@@ -80,7 +77,7 @@ class BluetoothHCISocketProvider:
         while self._keep_running:
             data = self._socket.recv(1024)         # blocking
             if self._socket_on_data_user_callback:
-                self._socket_on_data_user_callback(data) # bytearray
+                self._socket_on_data_user_callback(bytearray(data))
 
     def on_data(self, callback):
         self._socket_on_data_user_callback = callback
@@ -88,12 +85,14 @@ class BluetoothHCISocketProvider:
 
 class BluetoothHCI:
 
-    def __init__(self, device_id=0):
-        # TODO: instatiante a provider interface from a factory (e.g. socket, serial, mock)
+    def __init__(self, device_id=0, auto_start = True):
+        # TODO: be given a provider interface from a factory (e.g. socket, serial, mock)
         self.hci = BluetoothHCISocketProvider(device_id)
+        if auto_start:
+            self.start()
 
     # -------------------------------------------------
-    # Public HCI API, delegates to the underlying HCI driver provider
+    # Public HCI API, simply delegates to the composite HCI provider
 
     def start(self):
         self.hci.open()
@@ -103,6 +102,14 @@ class BluetoothHCI:
 
     def send_cmd(self, cmd, data):
         return self.hci.send_cmd(cmd, data)
+        # packet type struct : https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/lib/hci.h#n117
+        # typedef struct {
+        #   uint16_t	opcode;		/* OCF & OGF */
+        #   uint8_t		plen;
+        #   } __attribute__ ((packed))	hci_command_hdr;
+        # Op-code (16 bits): identifies the command:
+        #    OGF (Op-code Group Field, most significant 6 bits);
+        #    OCF (Op-code Command Field, least significant 10 bits)."""
 
     def send_cmd_value(self, cmd, value):
         self.hci.send_cmd_value(cmd, value)

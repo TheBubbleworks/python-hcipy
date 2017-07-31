@@ -18,12 +18,12 @@ The goal it to provide enough of the HCI API to support (at least) everything th
 
 `hcipy` could be considered to be, initially, a Python port of the [HCI support binary](https://github.com/sandeepmistry/node-bluetooth-hci-socket/blob/master/examples/le-connection-test.js) used by  NodeJS [noble](https://github.com/sandeepmistry/noble) and [bleno](https://github.com/sandeepmistry/bleno) libraries by [Sandeep Mistry](https://github.com/sandeepmistry)
 
-The current development platform is Linux (Raspbian), although other Unix based platforms may work. Mac and Windows should be possible, as they do for Noble and Bleno, in some way.
+The current development platform is Linux (Raspbian), although other Unix based platforms may work. Mac and Windows may be possible in the future, as they do for Noble and Bleno today, in some way.
 
 
 Status:  Experimental
 
-Author:  [Wayne Keenan](https://github.com/WayneKeenan)  / [@wkeenan](https://twitter.com/wkeenan)  
+Author:  [Wayne Keenan](https://github.com/WayneKeenan)  / [@wkeenan](https://twitter.com/wkeenan)  of [@the_bubbleworks](https://twitter.com/the_bubbleworks)
 
 
 # Examples

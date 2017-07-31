@@ -9,7 +9,6 @@ class BluetoothLEScanTest:
     def __init__(self, dev_id=0):
         self.hci = BluetoothHCI(dev_id)
         self.hci.on_data(self.on_data)
-        self.hci.start()
         print(self.hci.get_device_info())
 
     def __del__(self):
@@ -48,11 +47,11 @@ class BluetoothLEScanTest:
 
 
     def on_data(self, data):
-        data = bytearray(data)
         if data[0] == HCI_EVENT_PKT:
             print("HCI_EVENT_PKT")
             if data[1] == EVT_CMD_COMPLETE:
                 print("EVT_CMD_COMPLETE")
+                # TODO: unpack based on: https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/lib/hci.h#n1853
 
                 if (data[5]<<8) + data[4] == LE_SET_SCAN_PARAMETERS_CMD:
                     if data[6] == HCI_SUCCESS:
@@ -65,7 +64,8 @@ class BluetoothLEScanTest:
             elif data[1] == EVT_LE_META_EVENT:
                 print("EVT_LE_META_EVENT")
                 if data[3] == EVT_LE_ADVERTISING_REPORT:
-                    # TODO: check offsets for all of these:
+
+                    # TODO: unpack based on: https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/lib/hci.h#n2167
 
                     gap_adv_type =['ADV_IND', 'ADV_DIRECT_IND', 'ADV_SCAN_IND', 'ADV_NONCONN_IND', 'SCAN_RSP'][data[5]]
                     gap_addr_type = ['PUBLIC', 'RANDOM'][data[6]]

@@ -9,7 +9,6 @@ from hcipy import *
 # $ sudo hciconfig hci0 up
 
 hci = BluetoothHCI(0)
-hci.start()
 
 print(hci.get_device_info())
 

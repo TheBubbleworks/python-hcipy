@@ -2,15 +2,16 @@
 
 from signal import pause
 from hcipy import *
-from codecs import encode, decode
+from codecs import decode
 
 # based on: https://github.com/sandeepmistry/node-bluetooth-hci-socket/blob/master/examples/le-advertisement-test.js
 
 class BluetoothLEAdvertisementTest():
 
     def __init__(self, device_id=0):
-        self.hci = BluetoothHCI(device_id)
+        self.hci = BluetoothHCI(device_id, auto_start=False)
         self.hci.on_data(self.on_data)
+        print(self.hci.get_device_info())
 
     def __del__(self):
         self.hci.on_data(None)
@@ -83,7 +84,6 @@ class BluetoothLEAdvertisementTest():
         self.hci.write(cmd)
 
     def on_data(self, data):
-        data = bytearray(data)
         print("on_data")
         if data[0] == HCI_EVENT_PKT:
             print("HCI_EVENT_PKT")
@@ -92,7 +92,7 @@ class BluetoothLEAdvertisementTest():
 
                 if (data[5]<<8) + data[4] == LE_SET_ADVERTISING_PARAMETERS_CMD:
                     if data[6] == HCI_SUCCESS:
-                        print('LE Advertising Parameters Set');
+                        print('LE Advertising Parameters Set')
 
                 elif (data[5]<<8 + data[4]) ==  LE_SET_ADVERTISING_DATA_CMD:
                     if data[6] == HCI_SUCCESS:
@@ -128,26 +128,28 @@ class BluetoothLEAdvertisementTest():
                         masterClockAccuracy = data[21]
                     )
                     print(conn_info)
-                    self.set_advertise_enable(True);
+                    self.set_advertise_enable(True)
+
                 elif data[3] == EVT_LE_CONN_UPDATE_COMPLETE:
 
-                    conn_info = dict(
+                    conn_update_info = dict(
                         status = data[4],
                         handle = data[6]<<8 + data[5],
                         interval = data[8]<<8 + data[7],
                         latency = data[10]<<8 + data[9],
                         supervisionTimeout = data[12]<<8 + data[11],
                     )
-                    print(conn_info)
+                    print(conn_update_info)
 
 
 if __name__ == "__main__":
 
     print("Please stop the bluetoothd service: sudo service bluetooth stop")
-    ble_advertise_test = BluetoothLEAdvertisementTest()
 
     scan_rsp_data = decode(b'0909657374696d6f74650e160a182eb8855fb5ddb601000200', 'hex')
     adv_data = decode(b'0201061aff4c000215b9407f30f5f8466eaff925556b57fe6d00010002b6', 'hex')
+
+    ble_advertise_test = BluetoothLEAdvertisementTest()
 
     ble_advertise_test.set_filter()
     ble_advertise_test.start()
@@ -155,8 +157,8 @@ if __name__ == "__main__":
     ble_advertise_test.set_advertise_enable(False)
 
     ble_advertise_test.set_advertising_parameter()
-    ble_advertise_test.set_scan_response_data(scan_rsp_data)
     ble_advertise_test.set_advertising_data(adv_data)
+    ble_advertise_test.set_scan_response_data(scan_rsp_data)
 
     ble_advertise_test.set_advertise_enable(True)
 
