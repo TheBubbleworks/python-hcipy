@@ -92,9 +92,11 @@ An example that shows setting up Advertisement and Scan Response data.
 
 ## LE Connection 
 
-An example that shows how to set up an LE connection. Contains reference information used for the `unpack`-ing of HCI packets into Python dictionaries.  
+An example that shows how to set up an LE connection. 
 
-[le_advertisement_test.py](le_advertisement_test.py)
+Contains reference information used for the `unpack`-ing of HCI packets into Python dictionaries.  
+
+[le_connection_test.py](le_connection_test.py)
 
 
 ## License
