@@ -23,7 +23,7 @@ class BluetoothLEConnectionTest:
                              (1 << EVT_DISCONN_COMPLETE)
                              | (1 << EVT_CMD_COMPLETE)
                              | (1 << EVT_CMD_STATUS),                           # eventMask1
-                             1 << (EVT_LE_META_EVENT - 32),                     # eventMask1
+                             1 << (EVT_LE_META_EVENT - 32),                     # eventMask2
                              0                                                  # opcode
                              )
 
@@ -136,6 +136,9 @@ class BluetoothLEConnectionTest:
                 s = struct.Struct('=B BB   BHB')
                 fields = s.unpack(data)
                 evt_disconn_complete = dict(
+                    #packet_indicator=fields[0],
+                    #hdr_evt=fields[1],
+                    #hdr_plen=fields[2],
                     status=fields[3],
                     handle=fields[4],
                     reason=fields[5],
@@ -178,6 +181,10 @@ class BluetoothLEConnectionTest:
                     s = struct.Struct('=B B BB B H B B 6B HHH B')
                     fields = s.unpack(data)
                     evt_le_connection_complete = dict(
+                        #packet_indicator=fields[0],
+                        #hdr_evt=fields[1],
+                        #hdr_plen=fields[2],
+                        #le_meta_subevent=fields[3]
                         status      = fields[4],
                         handle      = fields[5],
                         role        = fields[6],
@@ -206,6 +213,10 @@ class BluetoothLEConnectionTest:
                     s = struct.Struct('=B B BB  B 4H')
                     fields = s.unpack(data)
                     evt_le_connection_update_complete = dict(
+                        # packet_indicator=fields[0],
+                        # hdr_evt=fields[1],
+                        # hdr_plen=fields[2],
+                        # le_meta_subevent=fields[3]
                         status   = fields[4],
                         handle   = fields[5],
                         interval = fields[6] * 1.25,

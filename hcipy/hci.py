@@ -50,6 +50,9 @@ class BluetoothHCISocketProvider:
 
 
     def open(self):
+
+        # TODO: specify channel: HCI_CHANNEL_RAW, HCI_CHANNEL_USER, HCI_CHANNEL_CONTROL
+        # https://www.spinics.net/lists/linux-bluetooth/msg37345.html
         self._socket.bind((self.device_id,))
 
         self._socket_poll_thread = threading.Thread(target=self._socket_poller, name='HCISocketPoller')
