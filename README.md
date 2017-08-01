@@ -1,7 +1,7 @@
 
 # Bluetooth HCI Python library
 
-A pure Python module written using only the Python standard library for interacting with the Bluetooth Host Controller Interface (HCI), e.g. Bluetooth LE hardware.
+A pure Python module written using only the Python (2.x/3.x) standard library for interacting with the Bluetooth Host Controller Interface (HCI), e.g. Bluetooth LE hardware.
 
 The primary benefit of using this module is the lack of having any dependency on: PyBluez Python & C based module, the `bluetoothd` service or D-Bus; this module just uses the standard Python socket API.
 
@@ -83,6 +83,18 @@ LE Advertising Report
 	EIR       = ['\x02', '\x01', '\x05', '\r', '\t', 'P', 'u', 'c', 'k', '.', 'j', 's', ' ', '7', 'b', '4']
 	RSSI      = 178
 ```
+
+## LE Advertisement
+
+An example that shows setting up Advertisement and Scan Response data.
+ 
+[le_advertisement_test.py](le_advertisement_test.py)
+
+## LE Connection 
+
+An example that shows how to set up an LE connection. Contains reference information used for the `unpack`-ing of HCI packets into Python dictionaries.  
+
+[le_advertisement_test.py](le_advertisement_test.py)
 
 
 ## License
