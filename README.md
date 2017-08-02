@@ -1,7 +1,6 @@
 
 # Bluetooth HCI Python library
 
-===
 
 A pure Python module written using only the Python (2.x/3.x) standard library for interacting with the Bluetooth Host Controller Interface (HCI), e.g. for controlling Bluetooth LE hardware.
 
@@ -27,7 +26,7 @@ Status:  __Experimental__ - currently a low-level HCI wrapper with a handful of 
 
 Author:  [Wayne Keenan](https://github.com/WayneKeenan)  / [@wkeenan](https://twitter.com/wkeenan)  of [@the_bubbleworks](https://twitter.com/the_bubbleworks)
 
-===
+---
 
 # Getting Started
 
@@ -54,7 +53,7 @@ sudo python eddystone_beacon.py https://raspberrypi.org/
 
 Considering the early stage of `hcipy` development the value of doing so is probably very limited and you will still need to clone/copy the examples from the `hcipy` github repo.
 
-===
+---
 
 # Examples
 
@@ -73,7 +72,7 @@ sudo python eddystone_beacon.py
 This restriction can be removed, please see below.
 
 
-## HCI Device control 
+## Example 1 - HCI Device control 
 
 The following stop/starts the `hci0` device,   [bounce_device.py](bounce_device.py).
 ```python
@@ -93,7 +92,7 @@ $ sudo hciconfig hci0 up
 ```
 
 
-## LE Scanning 
+## Example 2 - LE Scanning 
 
 Scan for Bluetooth LE devices, [le_scan_test.py](le_scan_test.py).
 
@@ -127,24 +126,24 @@ LE Advertising Report
 	RSSI      = 178
 ```
 
-## LE Advertisement
+## Example 3 - LE Advertisement
 
 An example that shows setting up Advertisement and Scan Response data, [le_advertisement_test.py](le_advertisement_test.py).
 
 
-## Beacon -  Physical Web (Eddystone)
+## Example 4 - Physical Web Beacon (Eddystone)
 
 An example that demonstrates a Physical Web (Eddystone) beacon, [eddystone_beacon.py](eddystone_beacon.py)
 
 
-## LE Connection
+## Example 5 - LE Connection
 
 An example that shows how to set up an LE connection, [le_connection_test.py](le_connection_test.py).
 
 Contains reference information used for the `unpack`-ing of HCI packets into Python dictionaries.
 
 
-===
+---
 
 # Restrictions
 
@@ -162,7 +161,8 @@ Note 2: For the minority of users that boot from an NFS mounted root filesystem 
 
 
 
-===
+---
+
 ## License
 
 Copyright (C) 2017 Wayne Keenan <wayne@thebubbleworks.com>
