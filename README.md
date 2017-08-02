@@ -1,13 +1,15 @@
 
 # Bluetooth HCI Python library
 
-A pure Python module written using only the Python (2.x/3.x) standard library for interacting with the Bluetooth Host Controller Interface (HCI), e.g. Bluetooth LE hardware.
+===
 
-The primary benefit of using this module is the lack of having any dependency on: PyBluez Python & C based module, the `bluetoothd` service or D-Bus; this module just uses the standard Python socket API.
+A pure Python module written using only the Python (2.x/3.x) standard library for interacting with the Bluetooth Host Controller Interface (HCI), e.g. for controlling Bluetooth LE hardware.
+
+The primary benefit of using this module is the lack of having any dependency on: the PyBluez Python (& C based) module, the `bluetoothd` service or D-Bus; this module just uses the standard Python socket API.
 
 This is being developed as an experiment for the [bluezero](https://github.com/ukBaz/python-bluezero) library in the open with the hope that developers may find it useful and might also contribute to the development.
 
-The goal it to provide enough of the HCI API to support (at least) everything that `bluezero` aims to support, which includes:
+The ultimate goal is to provide easy access to enough of the HCI API to support (at least) everything that `bluezero` aims to support, which includes:
 
 - BLE Adapter controler and querying
 - Advertisement (GATT, Eddystone Beacons, custom)
@@ -21,18 +23,59 @@ The goal it to provide enough of the HCI API to support (at least) everything th
 The current development platform is Linux (Raspbian), although other Unix based platforms may work. Mac and Windows may be possible in the future, as they do for Noble and Bleno today, in some way.
 
 
-Status:  Experimental
+Status:  __Experimental__ - currently a low-level HCI wrapper with a handful of examples for context and usage.
 
 Author:  [Wayne Keenan](https://github.com/WayneKeenan)  / [@wkeenan](https://twitter.com/wkeenan)  of [@the_bubbleworks](https://twitter.com/the_bubbleworks)
 
+===
+
+# Getting Started
+
+Running the following on a freshly setup Pi running Raspbian Jessie (or Jessie Lite) will turn your Pi into a Physical Web (Eddystone) beacon:
+
+```bash
+git clone https://github.com/TheBubbleworks/python-hcipy && cd python-hcipy
+
+sudo service bluetooth stop
+sudo python eddystone_beacon.py
+```
+
+You can also provide your own URL for the beacon as a parameter:
+```bash
+sudo python eddystone_beacon.py https://raspberrypi.org/
+```
+
+
+ You can install the `hcipy` library using `pip` if you wish:
+
+ ```bash
+ sudo pip install hcipy
+ ```
+
+Considering the early stage of `hcipy` development the value of doing so is probably very limited and you will still need to clone/copy the examples from the `hcipy` github repo.
+
+===
 
 # Examples
 
+The examples demonstrate different low level use cases for communicating with the Bluetooth HCI API using `hcipy`.  The functionality that they excersise will be wrapped up into higher level functions in this library or a seperate library.
+
+Before running a `hcipy` based script you should stop the `bluetoothd` system service (as it can interfer):
+```bash
+sudo service bluetooth stop
+```
+
+By default `hcipy` scripts need to be run as `root` user to allow access the kernel's HCI interface, e.g.:
+```
+sudo python eddystone_beacon.py
+```
+
+This restriction can be removed, please see below.
+
+
 ## HCI Device control 
 
-The following stop/starts the `hci0` device.
-
-[bounce_device.py](bounce_device.py)
+The following stop/starts the `hci0` device,   [bounce_device.py](bounce_device.py).
 ```python
 from hcipy import *
 
@@ -52,7 +95,7 @@ $ sudo hciconfig hci0 up
 
 ## LE Scanning 
 
-[le_scan_test.py](le_scan_test.py)
+Scan for Bluetooth LE devices, [le_scan_test.py](le_scan_test.py).
 
 ```python
 ble_scan_test = BluetoothLEScanTest()
@@ -86,19 +129,40 @@ LE Advertising Report
 
 ## LE Advertisement
 
-An example that shows setting up Advertisement and Scan Response data.
- 
-[le_advertisement_test.py](le_advertisement_test.py)
-
-## LE Connection 
-
-An example that shows how to set up an LE connection. 
-
-Contains reference information used for the `unpack`-ing of HCI packets into Python dictionaries.  
-
-[le_connection_test.py](le_connection_test.py)
+An example that shows setting up Advertisement and Scan Response data, [le_advertisement_test.py](le_advertisement_test.py).
 
 
+## Beacon -  Physical Web (Eddystone)
+
+An example that demonstrates a Physical Web (Eddystone) beacon, [eddystone_beacon.py](eddystone_beacon.py)
+
+
+## LE Connection
+
+An example that shows how to set up an LE connection, [le_connection_test.py](le_connection_test.py).
+
+Contains reference information used for the `unpack`-ing of HCI packets into Python dictionaries.
+
+
+===
+
+# Restrictions
+
+
+The requirement to run as the `root` user can be removed by running the following commands just once (or after any Python upgrade):
+
+```bash
+sudo setcap cap_net_raw+eip $(eval readlink -f `which python`)
+sudo setcap cap_net_raw+eip $(eval readlink -f `which python3`)
+```
+
+Note 1: Some may consider this to be a potential security risk (TODO: elaborate), but it's handy :)
+
+Note 2: For the minority of users that boot from an NFS mounted root filesystem please be aware that `setcap` won't work for you. You can ignore this if you use the normal method of booting off an SDCard.
+
+
+
+===
 ## License
 
 Copyright (C) 2017 Wayne Keenan <wayne@thebubbleworks.com>

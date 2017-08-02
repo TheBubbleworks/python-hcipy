@@ -1,2 +1,4 @@
 *.pyc
 *.idea
+hcipy.egg-info
+dist
