@@ -1,63 +1,13 @@
 #!/usr/bin/python
 
-# An extension of the le_advertisement_test for Physical Web (Eddystone) beacons.
+# An extension of the le_advertisement_test.py example for creating Physical Web (Eddystone) beacons.
 
 from signal import pause
 from sys import argv
-from hcipy import *
 
+from le_advertisement_test import BluetoothLEAdvertisementTest
 
-class EddystoneBeaconTest:
-
-    def __init__(self, device_id=0):
-        self.hci = BluetoothHCI(device_id, auto_start=False)
-        self.hci.start()
-        self.hci.device_down()
-        self.hci.device_up()
-
-    def __del__(self):
-        self.hci.stop()
-
-    def set_advertise_enable(self, enabled):
-        cmd = struct.pack("<BHB" + "B",
-                          HCI_COMMAND_PKT,
-                          LE_SET_ADVERTISE_ENABLE_CMD,
-                          1,  # cmd parameters length
-                          0x01 if enabled else 0x00
-                          )
-        self.hci.write(cmd)
-
-    def set_advertising_parameters(self):
-        cmd = struct.pack("<BHB" + "2H 3B 6B B B",
-                          HCI_COMMAND_PKT,
-                          LE_SET_ADVERTISING_PARAMETERS_CMD,
-                          15,  # cmd parameters length
-                          0x00a0,  # min interval
-                          0x00a0,  # max interval
-                          0,  # adv type
-                          0,  # direct addr type
-                          0,  # direct addr type
-                          0, 0, 0, 0, 0, 0,  # direct addr
-                          0x07,
-                          0x00
-                          )
-        self.hci.write(cmd)
-
-
-    def set_advertising_data(self, data=b''):
-        #  Pad unused bytes in the advertisment with 0
-        padded_data = memoryview(data).tolist()
-        padded_data.extend([0] * (31 - len(padded_data)))
-
-        cmd = struct.pack("<BHB" + "B 31B",
-                          HCI_COMMAND_PKT,
-                          LE_SET_ADVERTISING_DATA_CMD,
-                          32,  # cmd parameters length
-                          len(data),
-                          *padded_data
-                          )
-        self.hci.write(cmd)
-
+class EddystoneBeaconTest(BluetoothLEAdvertisementTest):
 
     # -------------------------------------------
     # Eddystone  (pretty much as-is from the Google source)
@@ -144,10 +94,11 @@ if __name__ == "__main__":
     print("Beacon URL = {}".format(beacon_url))
 
     ebt = EddystoneBeaconTest()
+    ebt.start()
 
     ebt.set_advertise_enable(False)
 
-    ebt.set_advertising_parameters()
+    ebt.set_advertising_parameter()
 
     adv_data = ebt.eddystone_url_adv_data(beacon_url)
     ebt.set_advertising_data(adv_data)
