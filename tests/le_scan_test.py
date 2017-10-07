@@ -4,12 +4,14 @@ from hcipy import *
 
 # based on: https://github.com/sandeepmistry/node-bluetooth-hci-socket/blob/master/examples/le-scan-test.js
 
+
 class BluetoothLEScanTest:
 
     def __init__(self, dev_id=0):
         self.hci = BluetoothHCI(dev_id)
         self.hci.on_data(self.on_data)
         print(self.hci.get_device_info())
+        self.found_bd_addrs = set()
 
     def __del__(self):
         self.hci.on_data(None)
@@ -70,24 +72,16 @@ class BluetoothLEScanTest:
                     gap_adv_type =['ADV_IND', 'ADV_DIRECT_IND', 'ADV_SCAN_IND', 'ADV_NONCONN_IND', 'SCAN_RSP'][data[5]]
                     gap_addr_type = ['PUBLIC', 'RANDOM'][data[6]]
                     gap_addr =  [hex(c) for c in data[12:6:-1]]
+
+                    gap_addr_str =  ':'.join([hex(c) for c in data[12:6:-1]])
+                    self.found_bd_addrs.add(gap_addr_str)
                     eir = [chr(c) for c in data[14:-2]]
                     rssi = data[-1]
 
                     print('LE Advertising Report')
                     print('\tAdv Type  = {}'.format(gap_adv_type))
                     print('\tAddr Type = {}'.format(gap_addr_type))
-                    print('\tAddr      = {}'.format(gap_addr))
+                    print('\tAddr      = {}'.format(gap_addr_str))
                     print('\tEIR       = {}'.format(eir))
                     print('\tRSSI      = {}'.format(rssi))
 
-
-if __name__ == "__main__":
-
-    ble_scan_test = BluetoothLEScanTest()
-
-    ble_scan_test.set_scan_enable(False)
-    ble_scan_test.set_filter()
-    ble_scan_test.set_scan_parameters()
-    ble_scan_test.set_scan_enable(True, True)
-
-    pause()
