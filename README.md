@@ -155,6 +155,13 @@ sudo setcap cap_net_raw+eip $(eval readlink -f `which python`)
 sudo setcap cap_net_raw+eip $(eval readlink -f `which python3`)
 ```
 
+on Stretch:
+
+```bash
+sudo setcap cap_net_raw,cap_net_admin+eip $(eval readlink -f `which python`)
+sudo setcap cap_net_raw,cap_net_admin+eip $(eval readlink -f `which python3`)
+```
+
 Note 1: Some may consider this to be a potential security risk (TODO: elaborate), but it's handy :)
 
 Note 2: For the minority of users that boot from an NFS mounted root filesystem please be aware that `setcap` won't work for you. You can ignore this if you use the normal method of booting off an SDCard.
