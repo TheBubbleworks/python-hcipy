@@ -74,7 +74,7 @@ This restriction can be removed, please see below.
 
 ## Example 1 - HCI Device control 
 
-The following stop/starts the `hci0` device,   [bounce_device.py](bounce_device.py).
+The following stop/starts the `hci0` device,   [bounce_device.py](tests/bounce_device.py).
 ```python
 from hcipy import *
 
@@ -94,7 +94,7 @@ $ sudo hciconfig hci0 up
 
 ## Example 2 - LE Scanning 
 
-Scan for Bluetooth LE devices, [le_scan_test.py](le_scan_test.py).
+Scan for Bluetooth LE devices, [le_scan_test.py](tests/le_scan_test.py).
 
 ```python
 ble_scan_test = BluetoothLEScanTest()
@@ -128,17 +128,17 @@ LE Advertising Report
 
 ## Example 3 - LE Advertisement
 
-An example that shows setting up Advertisement and Scan Response data, [le_advertisement_test.py](le_advertisement_test.py).
+An example that shows setting up Advertisement and Scan Response data, [le_advertisement_test.py](tests/le_advertisement_test.py).
 
 
 ## Example 4 - Physical Web Beacon (Eddystone)
 
-An example that demonstrates a Physical Web (Eddystone) beacon, [eddystone_beacon.py](eddystone_beacon.py)
+An example that demonstrates a Physical Web (Eddystone) beacon, [eddystone_beacon.py](tests/eddystone_beacon.py)
 
 
 ## Example 5 - LE Connection
 
-An example that shows how to set up an LE connection, [le_connection_test.py](le_connection_test.py).
+An example that shows how to set up an LE connection, [le_connection_test.py](tests/le_connection_test.py).
 
 Contains reference information used for the `unpack`-ing of HCI packets into Python dictionaries.
 
