@@ -93,21 +93,20 @@ class BluetoothLEAdvertisementTest():
                 if (data[5]<<8) + data[4] == LE_SET_ADVERTISING_PARAMETERS_CMD:
                     if data[6] == HCI_SUCCESS:
                         print('LE Advertising Parameters Set')
-
-                elif (data[5]<<8 + data[4]) ==  LE_SET_ADVERTISING_DATA_CMD:
+                elif (data[5]<<8) + data[4] == LE_SET_ADVERTISING_DATA_CMD:
                     if data[6] == HCI_SUCCESS:
                         print('LE Advertising Data Set')
-                elif data[5]<<8 + data[4] ==  LE_SET_SCAN_RESPONSE_DATA_CMD:
+                elif (data[5]<<8) + data[4] == LE_SET_SCAN_RESPONSE_DATA_CMD:
                     if data[6] == HCI_SUCCESS:
                         print('LE Scan Response Data Set')
-                elif data[5]<<8 + data[4] ==  LE_SET_ADVERTISE_ENABLE_CMD:
+                elif (data[5]<<8) + data[4] == LE_SET_ADVERTISE_ENABLE_CMD:
                     if data[6] == HCI_SUCCESS:
                         print('LE Advertise Enable Set')
             elif data[1] == EVT_DISCONN_COMPLETE:
                 print("EVT_DISCONN_COMPLETE")
                 disconn_info = dict(
                     status = data[3],
-                    handle = data[5]<<8 + data[4],
+                    handle = (data[5]<<8) + data[4],
                     reason = data[6]
                 )
                 print(disconn_info)
@@ -118,13 +117,13 @@ class BluetoothLEAdvertisementTest():
 
                     conn_info = dict(
                         status= data[4],
-                        handle= data[6]<<8 + data[5],
+                        handle= (data[6]<<8) + data[5],
                         role=   data[7],
                         peerBdAddrType= data[8],
                         peerBdAddr= 0, #data.slice(9, 15)
-                        interval=  data[16]<<8 + data[15],
-                        latency= data[18]<<8 + data[17],
-                        supervisionTimeout= data[20]<<8 + data[19],
+                        interval= (data[16]<<8) + data[15],
+                        latency= (data[18]<<8) + data[17],
+                        supervisionTimeout= (data[20]<<8) + data[19],
                         masterClockAccuracy = data[21]
                     )
                     print(conn_info)
@@ -134,10 +133,10 @@ class BluetoothLEAdvertisementTest():
 
                     conn_update_info = dict(
                         status = data[4],
-                        handle = data[6]<<8 + data[5],
-                        interval = data[8]<<8 + data[7],
-                        latency = data[10]<<8 + data[9],
-                        supervisionTimeout = data[12]<<8 + data[11],
+                        handle = (data[6]<<8) + data[5],
+                        interval = (data[8]<<8) + data[7],
+                        latency = (data[10]<<8) + data[9],
+                        supervisionTimeout = (data[12]<<8) + data[11],
                     )
                     print(conn_update_info)
 
