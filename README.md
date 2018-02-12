@@ -1,6 +1,7 @@
 
-# Bluetooth HCI Python library
+# This experiment is no longer being maintained, development focus has moved to the cross platform [bleson](https://github.com/TheCellule/python-bleson) library.
 
+# Bluetooth HCI Python library   
 
 A pure Python module written using only the Python (2.x/3.x) standard library for interacting with the Bluetooth Host Controller Interface (HCI), e.g. for controlling Bluetooth LE hardware.
 
