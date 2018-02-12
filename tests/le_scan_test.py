@@ -85,3 +85,13 @@ class BluetoothLEScanTest:
                     print('\tEIR       = {}'.format(eir))
                     print('\tRSSI      = {}'.format(rssi))
 
+
+if __name__ == "__main__":
+
+    ble_scan_test = BluetoothLEScanTest()
+    ble_scan_test.set_scan_enable(False)
+    ble_scan_test.set_filter()
+    ble_scan_test.set_scan_parameters()
+    ble_scan_test.set_scan_enable(True, True)
+
+    pause()
